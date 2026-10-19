@@ -38,6 +38,8 @@ services:
       # Dummy HTTPS value — required by MCP SDK which enforces HTTPS on the issuer URL.
       # Your AI app still calls this server over plain HTTP inside Docker (http://ms365-mcp:4000/mcp).
       MS365_MCP_PUBLIC_URL: "https://localhost:4000"
+      # Allows internal backend-to-backend AI app connections without requiring an incoming Bearer header
+      MS365_MCP_TRUST_PROXY_AUTH: "true"
 
     # --http binds on all interfaces so Docker inter-container networking works
     # --org-mode enables Teams/SharePoint — remove if personal Outlook/OneDrive only
@@ -45,9 +47,13 @@ services:
       - "--http"
       - "0.0.0.0:4000"
       - "--org-mode"
+      - "--enable-auth-tools"
       # - "--read-only"       # uncomment to disable all write operations
       # - "--preset"
       # - "mail"              # expose only email tools
+
+    volumes:
+      - mcp-tokens:/root/.config/ms-365-mcp-server
 
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:4000/', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
@@ -67,3 +73,6 @@ services:
 networks:
   ai-net:
     external: true
+
+volumes:
+  mcp-tokens:
