@@ -40,17 +40,18 @@ services:
       MS365_MCP_PUBLIC_URL: "https://localhost:4000"
       # Allows internal backend-to-backend AI app connections without requiring an incoming Bearer header
       MS365_MCP_TRUST_PROXY_AUTH: "true"
+      # Restrict requested scopes strictly to Mail and Calendar permissions granted in Azure
+      MS365_MCP_ALLOWED_SCOPES: "Mail.ReadWrite Mail.Send Calendars.ReadWrite User.Read offline_access"
 
     # --http binds on all interfaces so Docker inter-container networking works
-    # --org-mode enables Teams/SharePoint — remove if personal Outlook/OneDrive only
+    # Expose only Outlook email and calendar tools (excludes Teams, SharePoint, OneDrive, etc.)
     command:
       - "--http"
       - "0.0.0.0:4000"
-      - "--org-mode"
+      - "--preset"
+      - "mail,calendar"
       - "--enable-auth-tools"
       # - "--read-only"       # uncomment to disable all write operations
-      # - "--preset"
-      # - "mail"              # expose only email tools
 
     volumes:
       - mcp-tokens:/root/.config/ms-365-mcp-server
