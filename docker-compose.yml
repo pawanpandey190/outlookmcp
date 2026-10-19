@@ -10,7 +10,7 @@ version: "3.9"
 #   docker network connect ai-net <your-ai-app-container-name>
 #
 # Then your AI app can call this server at:
-#   http://ms365-mcp:3000/mcp
+#   http://ms365-mcp:4000/mcp
 # ─────────────────────────────────────────────────────────────────
 
 services:
@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
 
     ports:
-      - "3000:3000"           # MCP HTTP endpoint exposed at YOUR_VM_IP:3000
+      - "4000:4000"           # MCP HTTP endpoint exposed at YOUR_VM_IP:4000
 
     # Copy .env.example to .env on your VM and fill in your Azure credentials
     # .env is gitignored — never committed to the repo
@@ -41,14 +41,14 @@ services:
     # --org-mode enables Teams/SharePoint — remove if personal Outlook/OneDrive only
     command:
       - "--http"
-      - "0.0.0.0:3000"
+      - "0.0.0.0:4000"
       - "--org-mode"
       # - "--read-only"       # uncomment to disable all write operations
       # - "--preset"
       # - "mail"              # expose only email tools
 
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/"]
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:4000/"]
       interval: 30s
       timeout: 10s
       retries: 3
