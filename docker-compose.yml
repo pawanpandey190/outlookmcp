@@ -38,8 +38,8 @@ services:
       # Dummy HTTPS value — required by MCP SDK which enforces HTTPS on the issuer URL.
       # Your AI app still calls this server over plain HTTP inside Docker (http://ms365-mcp:4000/mcp).
       MS365_MCP_PUBLIC_URL: "https://localhost:4000"
-      # Allows internal backend-to-backend AI app connections without requiring an incoming Bearer header
-      MS365_MCP_TRUST_PROXY_AUTH: "true"
+      # Allows the AI app to discover tools (initialize, tools/list) before a user token is supplied
+      MS365_MCP_ALLOW_UNAUTHENTICATED_DISCOVERY: "true"
       # Restrict requested scopes strictly to Mail and Calendar permissions granted in Azure
       MS365_MCP_ALLOWED_SCOPES: "Mail.ReadWrite Mail.Send Calendars.ReadWrite User.Read offline_access"
 
@@ -50,7 +50,6 @@ services:
       - "0.0.0.0:4000"
       - "--preset"
       - "mail,calendar"
-      - "--enable-auth-tools"
       # - "--read-only"       # uncomment to disable all write operations
 
     volumes:
