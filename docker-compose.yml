@@ -1,4 +1,3 @@
-version: "3.9"
 
 # ─────────────────────────────────────────────────────────────────
 # MS-365 MCP Server — docker-compose.yml
@@ -36,6 +35,9 @@ services:
 
     environment:
       NODE_ENV: production
+      # Dummy HTTPS value — required by MCP SDK which enforces HTTPS on the issuer URL.
+      # Your AI app still calls this server over plain HTTP inside Docker (http://ms365-mcp:4000/mcp).
+      MS365_MCP_PUBLIC_URL: "https://localhost:4000"
 
     # --http binds on all interfaces so Docker inter-container networking works
     # --org-mode enables Teams/SharePoint — remove if personal Outlook/OneDrive only
