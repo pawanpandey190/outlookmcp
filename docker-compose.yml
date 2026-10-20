@@ -63,16 +63,12 @@ services:
       start_period: 15s
 
     networks:
-      - ai-net                # shared network with your existing AI app container
+      - neogen_backend        # Native backend network of neogen-app-1
 
-# ─────────────────────────────────────────────────────────────────
-# Shared Network — must exist before running docker compose up
-# Create it once:  docker network create ai-net
-# Connect AI app:  docker network connect ai-net <ai-app-container>
-# ─────────────────────────────────────────────────────────────────
 networks:
-  ai-net:
+  neogen_backend:
     external: true
 
 volumes:
   mcp-tokens:
+
