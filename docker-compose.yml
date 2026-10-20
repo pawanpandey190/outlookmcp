@@ -35,9 +35,8 @@ services:
 
     environment:
       NODE_ENV: production
-      # Dummy HTTPS value — required by MCP SDK which enforces HTTPS on the issuer URL.
-      # Your AI app still calls this server over plain HTTP inside Docker (http://ms365-mcp:4000/mcp).
-      MS365_MCP_PUBLIC_URL: "https://localhost:4000"
+      # HTTPS URL exposed through the Nginx reverse proxy on port 8443
+      MS365_MCP_PUBLIC_URL: "https://localhost:8443"
       # Allows the AI app to discover tools (initialize, tools/list) before a user token is supplied
       MS365_MCP_ALLOW_UNAUTHENTICATED_DISCOVERY: "true"
       # Restrict requested scopes strictly to Mail and Calendar permissions granted in Azure
@@ -65,6 +64,20 @@ services:
     networks:
       - ai-net                # shared network with your existing AI app container
 
+  nginx:
+    image: nginx:alpine
+    container_name: ms365-nginx
+    restart: unless-stopped
+    ports:
+      - "8443:8443"           # HTTPS endpoint exposed on port 8443 (co-exists with Caddy on 443)
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - ms365-mcp
+    networks:
+      - ai-net
+
 # ─────────────────────────────────────────────────────────────────
 # Shared Network — must exist before running docker compose up
 # Create it once:  docker network create ai-net
@@ -76,3 +89,4 @@ networks:
 
 volumes:
   mcp-tokens:
+
