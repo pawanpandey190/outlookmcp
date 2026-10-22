@@ -62,8 +62,6 @@ services:
       retries: 3
       start_period: 15s
 
-    networks:
-      - neogen_backend        # Native network of neogen-app-1
 
   nginx:
     image: nginx:alpine
@@ -76,13 +74,8 @@ services:
       - ./nginx/certs:/etc/nginx/certs:ro
     depends_on:
       - ms365-mcp
-    networks:
-      - neogen_backend
-
-networks:
-  neogen_backend:
-    external: true
 
 volumes:
   mcp-tokens:
+
 
