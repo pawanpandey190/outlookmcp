@@ -50,6 +50,7 @@ services:
       - "--org-mode"
       - "--preset"
       - "mail,calendar,work"
+      - "-v"                  # Enables console logging for docker logs
       # - "--read-only"       # uncomment to disable all write operations
 
     volumes:
