@@ -39,17 +39,17 @@ services:
       MS365_MCP_PUBLIC_URL: "https://localhost:8443"
       # Allows the AI app to discover tools (initialize, tools/list) before a user token is supplied
       MS365_MCP_ALLOW_UNAUTHENTICATED_DISCOVERY: "true"
-      # Restrict requested scopes strictly to Mail, Calendar, and SharePoint permissions granted in Azure
-      MS365_MCP_ALLOWED_SCOPES: "Mail.ReadWrite Mail.Send Calendars.ReadWrite Sites.Read.All Sites.ReadWrite.All User.Read offline_access"
+      # Restrict requested scopes strictly to Mail and Calendar permissions granted in Azure
+      MS365_MCP_ALLOWED_SCOPES: "Mail.ReadWrite Mail.Send Calendars.ReadWrite User.Read offline_access"
 
     # --http binds on all interfaces so Docker inter-container networking works
-    # Expose Outlook email, calendar, and SharePoint tools
+    # Expose Outlook email and calendar tools only (SharePoint disabled)
     command:
       - "--http"
       - "0.0.0.0:4000"
       - "--org-mode"
       - "--preset"
-      - "mail,calendar,work"
+      - "mail,calendar"
       - "-v"                  # Enables console logging for docker logs
       # - "--read-only"       # uncomment to disable all write operations
 
