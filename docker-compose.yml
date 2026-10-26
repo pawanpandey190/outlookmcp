@@ -39,8 +39,8 @@ services:
       MS365_MCP_PUBLIC_URL: "https://localhost:8443"
       # Allows the AI app to discover tools (initialize, tools/list) before a user token is supplied
       MS365_MCP_ALLOW_UNAUTHENTICATED_DISCOVERY: "true"
-      # Restrict requested scopes strictly to Mail and Calendar permissions granted in Azure
-      MS365_MCP_ALLOWED_SCOPES: "Mail.ReadWrite Mail.Send Calendars.ReadWrite User.Read offline_access"
+      # Mail and Calendar scopes + Sites.Read.All required by OBO token exchange (even without SharePoint tools)
+      MS365_MCP_ALLOWED_SCOPES: "Mail.ReadWrite Mail.Send Calendars.ReadWrite Sites.Read.All User.Read offline_access"
 
     # --http binds on all interfaces so Docker inter-container networking works
     # Expose Outlook email and calendar tools only (SharePoint disabled)
