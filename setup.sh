@@ -48,6 +48,8 @@ if [ ! -f ".env" ]; then
 fi
 
 # 4. Start the MCP server
+mkdir -p logs
+chmod 777 logs 2>/dev/null || true
 echo "[START] Starting ms365-mcp container..."
 docker compose pull
 docker compose up -d

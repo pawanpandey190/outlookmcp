@@ -41,6 +41,12 @@ services:
       MS365_MCP_ALLOW_UNAUTHENTICATED_DISCOVERY: "true"
       # Mail, Calendar, OneDrive, and SharePoint scopes
       MS365_MCP_ALLOWED_SCOPES: "Mail.ReadWrite Mail.Send Calendars.ReadWrite Sites.Read.All Sites.ReadWrite.All Files.Read.All Files.ReadWrite.All User.Read offline_access"
+      # Debug logging - enables all debug log lines
+      LOG_LEVEL: "debug"
+      # Set to false to prevent masking/redacting of emails, URLs and error response bodies
+      MS365_MCP_REDACT_PII: "false"
+      # Explicit log directory for persistent file logs
+      MS365_MCP_LOG_DIR: "/logs"
 
     # --http binds on all interfaces so Docker inter-container networking works
     # Expose Outlook email, calendar, OneDrive files, and SharePoint/work tools
@@ -55,6 +61,7 @@ services:
 
     volumes:
       - mcp-tokens:/root/.config/ms-365-mcp-server
+      - ./logs:/logs
 
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:4000/', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
